@@ -1,0 +1,30 @@
+.App {
+  text-align: center;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.App h1{
+  background-color: green;
+}
+
+.App form{
+  margin-left: 1%;
+}
+/* src/App.css */
+.form-row {
+  display: flex;
+  /* justify-content: space-between; */
+  gap: 1px;
+}
+
+.btnClass{
+  margin-top: 1%;
+}
