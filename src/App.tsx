@@ -1,6 +1,17 @@
-// src/App.tsx
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, FormHelperText, Button } from '@mui/material';
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+  FormHelperText,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+} from '@mui/material';
 import './App.css'; // Import the CSS file
 
 interface FormData {
@@ -9,12 +20,20 @@ interface FormData {
   program: string;
   thesisOption: string;
   semester: string;
+  certificate: 'None' | 'Big Data' | 'Cybersecurity' | '';
+  subject: string;
 }
+
+interface DataItem {
+  value: string;
+  label: string;
+}
+
 
 const educationOptions = [
   { value: '', label: '--Please choose an option--' },
   { value: 'Graduate', label: 'Graduate' },
-  { value: 'Undergraduate', label: 'Undergraduate',disabled:true },
+  { value: 'Undergraduate', label: 'Undergraduate' },
 ];
 
 const graduateOptions = [
@@ -49,7 +68,29 @@ const semesterOptions = [
   { value: 'Fall', label: 'Fall' },
 ];
 
-const currentYear = new Date().getFullYear();
+const certificateOptions = [
+  { value: '', label: '--Please choose an option--' },
+  { value: 'None', label: 'None' },
+  { value: 'Big Data', label: 'Big Data' },
+  { value: 'Cybersecurity', label: 'Cybersecurity' },
+];
+
+const subjectOptions: Record<'None' | 'Big Data' | 'Cybersecurity', DataItem[]> = {
+  'Big Data': [
+    { value: 'BD1', label: 'Big Data Analytics' },
+    { value: 'BD2', label: 'Data Mining' },
+  ],
+  'Cybersecurity': [
+    { value: 'CS1', label: 'Network Security' },
+    { value: 'CS2', label: 'Cryptography' },
+  ],
+  'None' : [
+    { value: 'ADA', label: 'Algorithm Design and Analysis' },
+    { value: 'CS2', label: 'Distributed Computing' },
+  ]
+};
+
+
 
 const App: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
@@ -58,6 +99,8 @@ const App: React.FC = () => {
     program: '',
     thesisOption: '',
     semester: '',
+    certificate: '',
+    subject: '',
   });
 
   const [error, setError] = useState({
@@ -66,6 +109,8 @@ const App: React.FC = () => {
     program: false,
     thesisOption: false,
     semester: false,
+    certificate: false,
+    subject: false,
   });
 
   const handleChange = (e: SelectChangeEvent<string>) => {
@@ -81,6 +126,8 @@ const App: React.FC = () => {
         program: '',
         thesisOption: '',
         semester: '',
+        certificate: '',
+        subject: '',
       }));
       setError({
         educationLevel: false,
@@ -88,6 +135,8 @@ const App: React.FC = () => {
         program: false,
         thesisOption: false,
         semester: false,
+        certificate: false,
+        subject: false,
       });
     } else if (name === 'subField') {
       setFormData((prev) => ({
@@ -95,6 +144,8 @@ const App: React.FC = () => {
         program: '',
         thesisOption: '',
         semester: '',
+        certificate: '',
+        subject: '',
       }));
       setError((prev) => ({
         ...prev,
@@ -102,28 +153,48 @@ const App: React.FC = () => {
         program: false,
         thesisOption: false,
         semester: false,
+        certificate: false,
+        subject: false,
       }));
     } else if (name === 'program') {
       setFormData((prev) => ({
         ...prev,
         thesisOption: '',
         semester: '',
+        certificate: '',
+        subject: '',
       }));
       setError((prev) => ({
         ...prev,
         program: false,
         thesisOption: false,
         semester: false,
+        certificate: false,
+        subject: false,
       }));
     } else if (name === 'thesisOption') {
       setFormData((prev) => ({
         ...prev,
         semester: '',
+        certificate: '',
+        subject: '',
       }));
       setError((prev) => ({
         ...prev,
         thesisOption: false,
         semester: false,
+        certificate: false,
+        subject: false,
+      }));
+    } else if (name === 'certificate') {
+      setFormData((prev) => ({
+        ...prev,
+        subject: '',
+      }));
+      setError((prev) => ({
+        ...prev,
+        certificate: false,
+        subject: false,
       }));
     } else {
       setError((prev) => ({
@@ -141,6 +212,8 @@ const App: React.FC = () => {
       program: formData.program === '',
       thesisOption: formData.thesisOption === '',
       semester: formData.semester === '',
+      certificate: formData.certificate === '',
+      subject: formData.subject === '',
     };
 
     setError(newError);
@@ -156,8 +229,8 @@ const App: React.FC = () => {
   const renderSubFieldDropdown = () => {
     if (formData.educationLevel === 'Graduate') {
       return (
-        <FormControl sx={{ width: '15%' }} error={error.subField}>
-          <InputLabel id="graduate-subfield-label">Graduate Program</InputLabel>
+        <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.subField}>
+          <InputLabel className="card-text"  id="graduate-subfield-label">Graduate Program</InputLabel>
           <Select
             labelId="graduate-subfield-label"
             id="subField"
@@ -179,8 +252,8 @@ const App: React.FC = () => {
 
     if (formData.educationLevel === 'Undergraduate') {
       return (
-        <FormControl sx={{ width: '15%' }} error={error.subField}>
-          <InputLabel id="undergraduate-subfield-label">Undergraduate Program</InputLabel>
+        <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.subField}>
+          <InputLabel className="card-text"  id="undergraduate-subfield-label">Undergraduate Program</InputLabel>
           <Select
             labelId="undergraduate-subfield-label"
             id="subField"
@@ -206,8 +279,8 @@ const App: React.FC = () => {
   const renderProgramDropdown = () => {
     if (formData.subField === 'Masters') {
       return (
-        <FormControl sx={{ width: '15%' }} error={error.program}>
-          <InputLabel id="masters-program-label">Masters Program</InputLabel>
+        <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.program}>
+          <InputLabel className="card-text"  id="masters-program-label">Masters Program</InputLabel>
           <Select
             labelId="masters-program-label"
             id="program"
@@ -233,8 +306,8 @@ const App: React.FC = () => {
   const renderThesisOptionDropdown = () => {
     if (formData.program) {
       return (
-        <FormControl sx={{ width: '15%' }} error={error.thesisOption}>
-          <InputLabel id="thesis-option-label">Thesis Option</InputLabel>
+        <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.thesisOption}>
+          <InputLabel className="card-text"  id="thesis-option-label">Thesis Option</InputLabel>
           <Select
             labelId="thesis-option-label"
             id="thesisOption"
@@ -258,31 +331,21 @@ const App: React.FC = () => {
   };
 
   const renderSemesterDropdown = () => {
-    const currentMonth = new Date().getMonth() + 1; // January is 1, December is 12
-
-  let defaultSemester = '';
-  if (currentMonth >= 1 && currentMonth <= 4) {
-    defaultSemester = 'Spring';
-  } else if (currentMonth >= 5 && currentMonth <= 7) {
-    defaultSemester = 'Summer';
-  } else if (currentMonth >= 8 && currentMonth <= 12) {
-    defaultSemester = 'Fall';
-  }
-    if (formData.thesisOption === 'Non-Thesis') {
+    if (formData.thesisOption) {
       return (
-        <FormControl sx={{ width: '15%' }} error={error.semester}>
-          <InputLabel id="semester-label">Semester</InputLabel>
+        <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.semester}>
+          <InputLabel className="card-text"  id="semester-label">Semester</InputLabel>
           <Select
             labelId="semester-label"
             id="semester"
             name="semester"
-            value={formData.semester || defaultSemester}
+            value={formData.semester}
             label="Semester"
             onChange={handleChange}
           >
             {semesterOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
-                {option.label} {currentYear}
+                {option.label}
               </MenuItem>
             ))}
           </Select>
@@ -294,41 +357,127 @@ const App: React.FC = () => {
     return null;
   };
 
+  const renderCertificateDropdown = () => {
+    if (formData.semester) {
+      return (
+        <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.certificate}>
+          <InputLabel className="card-text"  id="certificate-label">Certificate</InputLabel>
+          <Select
+            labelId="certificate-label"
+            id="certificate"
+            name="certificate"
+            value={formData.certificate}
+            label="Certificate"
+            onChange={handleChange}
+          >
+            {certificateOptions.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+          {error.certificate && <FormHelperText>Please select a certificate option.</FormHelperText>}
+        </FormControl>
+      );
+    }
+
+    return null;
+  };
+
+  const renderSubjectDropdown = () => {
+    if (formData.certificate && formData.certificate !== 'None') {
+      return (
+        <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.subject}>
+          <InputLabel className="card-text"  id="subject-label">Subject</InputLabel>
+          <Select
+            labelId="subject-label"
+            id="subject"
+            name="subject"
+            value={formData.subject}
+            label="Subject"
+            onChange={handleChange}
+          >
+            {subjectOptions[formData.certificate].map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+          {error.subject && <FormHelperText>Please select a subject.</FormHelperText>}
+        </FormControl>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <div className="App">
-      <h1>Wright State University Grad Plan</h1>
+      <h1>Wright State University Education Plan</h1>
       <form onSubmit={handleSubmit}>
-        <div className="form-row">
-          <FormControl sx={{ width: '11%' }} error={error && formData.educationLevel === ''}>
-            <InputLabel id="education-level-label">Education Level</InputLabel>
-            <Select
-              labelId="education-level-label"
-              id="educationLevel"
-              name="educationLevel"
-              value={formData.educationLevel}
-              label="Education Level"
-              onChange={handleChange}
-            >
-              {educationOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value} disabled={option.disabled}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
-            {error && formData.educationLevel === '' && <FormHelperText>Please select an education level.</FormHelperText>}
-          </FormControl>
+        <Grid container justifyContent="center" className="card-container">
+          {/* <Grid item xs={12} sm={8} md={6} lg={4}> */}
+          <Grid item xs={12} md={4} lg={3}>
+            <Card className="card">
+              <CardContent className="card-content">
+                <Typography variant="h6" align="center" className="card-title">Phase 1</Typography>
+                <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.educationLevel}>
+                  <InputLabel className="card-text"  id="education-level-label">Education Level</InputLabel>
+                  <Select
+                    labelId="education-level-label"
+                    id="educationLevel"
+                    name="educationLevel"
+                    value={formData.educationLevel}
+                    label="Education Level"
+                    onChange={handleChange}
+                  >
+                    {educationOptions.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {error.educationLevel && <FormHelperText>Please select an education level.</FormHelperText>}
+                </FormControl>
 
-          {renderSubFieldDropdown()}
-          {renderProgramDropdown()}
-          {renderThesisOptionDropdown()}
-          {renderSemesterDropdown()}
-        </div>
+                {renderSubFieldDropdown()}
+                {renderProgramDropdown()}
+              </CardContent>
+            </Card>
+          </Grid>
 
-        <div className='btnClass'>
-          <Button type="submit" variant="contained" color="primary">
-            Submit
-          </Button>
-        </div>
+          {formData.educationLevel && formData.subField && formData.program && (
+            // <Grid item xs={12} sm={8} md={6} lg={4}>
+            <Grid item xs={12} md={4} lg={3}>
+              <Card className="card">
+                <CardContent className="card-content">
+                  <Typography variant="h6" align="center" className="card-title">Phase 2</Typography>
+                  {renderThesisOptionDropdown()}
+                  {renderSemesterDropdown()}
+                </CardContent>
+              </Card>
+            </Grid>
+          )}
+
+          {formData.thesisOption && formData.semester && (
+            // <Grid item xs={12} sm={8} md={6} lg={4} >
+            <Grid item xs={12} md={4} lg={3}>
+              <Card className="card">
+                <CardContent className="card-content">
+                  <Typography variant="h6" align="center">Phase 3</Typography>
+                  {renderCertificateDropdown()}
+                  {renderSubjectDropdown()}
+                </CardContent>
+              </Card>
+            </Grid>
+          )}
+        </Grid>
+
+        {formData.certificate && formData.subject && (
+          <Grid container justifyContent="center" sx={{ marginTop: 2 }}>
+            <Button variant="contained" color="primary" type="submit">Submit</Button>
+          </Grid>
+        )}
       </form>
     </div>
   );
