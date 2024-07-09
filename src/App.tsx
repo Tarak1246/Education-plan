@@ -84,7 +84,7 @@ const subjectOptions: Record<'None' | 'Big Data' | 'Cybersecurity', DataItem[]> 
     { value: 'CS1', label: 'Network Security' },
     { value: 'CS2', label: 'Cryptography' },
   ],
-  'None' : [
+  'None': [
     { value: 'ADA', label: 'Algorithm Design and Analysis' },
     { value: 'CS2', label: 'Distributed Computing' },
   ]
@@ -230,7 +230,7 @@ const App: React.FC = () => {
     if (formData.educationLevel === 'Graduate') {
       return (
         <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.subField}>
-          <InputLabel className="card-text"  id="graduate-subfield-label">Graduate Program</InputLabel>
+          <InputLabel className="card-text" id="graduate-subfield-label">Graduate Program</InputLabel>
           <Select
             labelId="graduate-subfield-label"
             id="subField"
@@ -253,7 +253,7 @@ const App: React.FC = () => {
     if (formData.educationLevel === 'Undergraduate') {
       return (
         <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.subField}>
-          <InputLabel className="card-text"  id="undergraduate-subfield-label">Undergraduate Program</InputLabel>
+          <InputLabel className="card-text" id="undergraduate-subfield-label">Undergraduate Program</InputLabel>
           <Select
             labelId="undergraduate-subfield-label"
             id="subField"
@@ -280,7 +280,7 @@ const App: React.FC = () => {
     if (formData.subField === 'Masters') {
       return (
         <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.program}>
-          <InputLabel className="card-text"  id="masters-program-label">Masters Program</InputLabel>
+          <InputLabel className="card-text" id="masters-program-label">Masters Program</InputLabel>
           <Select
             labelId="masters-program-label"
             id="program"
@@ -307,7 +307,7 @@ const App: React.FC = () => {
     if (formData.program) {
       return (
         <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.thesisOption}>
-          <InputLabel className="card-text"  id="thesis-option-label">Thesis Option</InputLabel>
+          <InputLabel className="card-text" id="thesis-option-label">Thesis Option</InputLabel>
           <Select
             labelId="thesis-option-label"
             id="thesisOption"
@@ -334,7 +334,7 @@ const App: React.FC = () => {
     if (formData.thesisOption) {
       return (
         <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.semester}>
-          <InputLabel className="card-text"  id="semester-label">Semester</InputLabel>
+          <InputLabel className="card-text" id="semester-label">Semester</InputLabel>
           <Select
             labelId="semester-label"
             id="semester"
@@ -361,7 +361,7 @@ const App: React.FC = () => {
     if (formData.semester) {
       return (
         <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.certificate}>
-          <InputLabel className="card-text"  id="certificate-label">Certificate</InputLabel>
+          <InputLabel className="card-text" id="certificate-label">Certificate</InputLabel>
           <Select
             labelId="certificate-label"
             id="certificate"
@@ -388,7 +388,7 @@ const App: React.FC = () => {
     if (formData.certificate && formData.certificate !== 'None') {
       return (
         <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.subject}>
-          <InputLabel className="card-text"  id="subject-label">Subject</InputLabel>
+          <InputLabel className="card-text" id="subject-label">Subject</InputLabel>
           <Select
             labelId="subject-label"
             id="subject"
@@ -422,7 +422,7 @@ const App: React.FC = () => {
               <CardContent className="card-content">
                 <Typography variant="h6" align="center" className="card-title">Phase 1</Typography>
                 <FormControl sx={{ width: '100%', marginBottom: 2 }} error={error.educationLevel}>
-                  <InputLabel className="card-text"  id="education-level-label">Education Level</InputLabel>
+                  <InputLabel className="card-text" id="education-level-label">Education Level</InputLabel>
                   <Select
                     labelId="education-level-label"
                     id="educationLevel"
